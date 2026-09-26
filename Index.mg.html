@@ -268,16 +268,21 @@ function renderHistory(){
 
         html += `
 
-        <div class="medication">
+<div class="medication">
 
-"<strong>" +
-item.date +
-"</strong> " +
+<strong>${item.date}</strong>
 
-"<button onclick='deleteHistory(" +
-index +
-")'>Delete</button><br>" +
+<button onclick="deleteHistory(${index})">
+Delete
+</button>
 
+<br><br>
+
+Total Score:
+${item.score}<br>
+
+Severity:
+${item.severity}<br><br>
 
             Total Score:
             ${item.score}<br>
