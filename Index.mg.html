@@ -110,13 +110,19 @@ function loadMedications(){
 
     let html = "";
 
-    meds.forEach(function(m){
+    meds.forEach(function(m,index){
 
         html +=
-        "<div class='medication'>"
-        + m.name +
-        " - "
-        + m.dose +
+        "<div class='medication'>" +
+
+        m.name +
+        " - " +
+        m.dose +
+
+        " <button onclick='deleteMedication(" +
+        index +
+        ")'>Delete</button>" +
+
         "</div>";
 
     });
@@ -124,6 +130,25 @@ function loadMedications(){
     document.getElementById(
     "medications"
     ).innerHTML = html;
+
+}
+
+function deleteMedication(index){
+
+    let meds =
+    JSON.parse(
+    localStorage.getItem("mgtrackermeds")
+    || "[]"
+    );
+
+    meds.splice(index,1);
+
+    localStorage.setItem(
+    "mgtrackermeds",
+    JSON.stringify(meds)
+    );
+
+    loadMedications();
 
 }
 
