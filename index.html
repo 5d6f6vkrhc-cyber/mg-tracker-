@@ -3,49 +3,257 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MG Tracker Test</title>
+<title>MG Tracker</title>
 
 <style>
 body{
-    font-family: Arial, sans-serif;
-    background:#eef4ff;
-    margin:0;
-    padding:20px;
+  font-family:-apple-system,Arial,sans-serif;
+  background:#eef4ff;
+  margin:0;
 }
+
+.header{
+  background:#2563eb;
+  color:white;
+  padding:20px;
+}
+
 .card{
-    background:white;
-    padding:20px;
-    border-radius:12px;
+  background:white;
+  margin:12px;
+  padding:15px;
+  border-radius:12px;
 }
-button{
-    padding:12px;
-    background:#2563eb;
-    color:white;
-    border:none;
-    border-radius:8px;
+
+.score{
+  font-size:36px;
+  font-weight:bold;
+  color:#2563eb;
+}
+
+label{
+  display:block;
+  margin:4px 0;
+}
+
+textarea{
+  width:100%;
+  height:100px;
+}
+
+input[type=range]{
+  width:100%;
 }
 </style>
 
 <script>
-function testClick(){
-    document.getElementById("result").innerHTML =
-        "JavaScript is working!";
+
+function updateScore(){
+
+  const groups = [
+    "talk",
+    "chew",
+    "swallow",
+    "breathing",
+    "vision",
+    "ptosis"
+  ];
+
+  let total = 0;
+
+  groups.forEach(group => {
+
+    const selected =
+      document.querySelector(
+        'input[name="' + group + '"]:checked'
+      );
+
+    if(selected){
+      total += parseInt(selected.value);
+    }
+
+  });
+
+  document.getElementById("score").innerHTML =
+    total + "/24";
+
+  let severity = "Mild";
+
+  if(total >= 16)
+    severity = "Severe";
+  else if(total >= 8)
+    severity = "Moderate";
+
+  document.getElementById("severity").innerHTML =
+    severity;
 }
+
+window.onload = function(){
+  updateScore();
+};
+
 </script>
 
 </head>
+
 <body>
 
+<div class="header">
+  <h1>MG Tracker</h1>
+</div>
+
 <div class="card">
-<h1>MG Tracker Test</h1>
+  <div class="score" id="score">0/24</div>
+  <div id="severity">Mild</div>
+</div>
 
-<p>If you can press this button and see the message below, then GitHub Pages and JavaScript are working.</p>
+<div class="card">
 
-<button onclick="testClick()">
-Test JavaScript
-</button>
+<h2>Talking</h2>
 
-<p id="result"></p>
+<label>
+<input onchange="updateScore()" type="radio" name="talk" value="0" checked>
+0 Normal
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="talk" value="1">
+1 Intermittent slurring
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="talk" value="2">
+2 Constant slurring but understandable
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="talk" value="3">
+3 Difficult to understand speech
+</label>
+
+<h2>Chewing</h2>
+
+<label>
+<input onchange="updateScore()" type="radio" name="chew" value="0" checked>
+0 Normal
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="chew" value="1">
+1 Fatigue with solids
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="chew" value="2">
+2 Fatigue with soft foods
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="chew" value="3">
+3 Feeding tube required
+</label>
+
+<h2>Swallowing</h2>
+
+<label>
+<input onchange="updateScore()" type="radio" name="swallow" value="0" checked>
+0 Normal
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="swallow" value="1">
+1 Rare choking
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="swallow" value="2">
+2 Frequent choking
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="swallow" value="3">
+3 Feeding tube required
+</label>
+
+<h2>Breathing</h2>
+
+<label>
+<input onchange="updateScore()" type="radio" name="breathing" value="0" checked>
+0 Normal
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="breathing" value="1">
+1 Shortness of breath on exertion
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="breathing" value="2">
+2 Shortness of breath at rest
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="breathing" value="3">
+3 Ventilator support
+</label>
+
+<h2>Double Vision</h2>
+
+<label>
+<input onchange="updateScore()" type="radio" name="vision" value="0" checked>
+0 None
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="vision" value="1">
+1 Occasional
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="vision" value="2">
+2 Daily intermittent
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="vision" value="3">
+3 Constant
+</label>
+
+<h2>Eyelid Droop</h2>
+
+<label>
+<input onchange="updateScore()" type="radio" name="ptosis" value="0" checked>
+0 None
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="ptosis" value="1">
+1 Occasional
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="ptosis" value="2">
+2 Daily intermittent
+</label>
+
+<label>
+<input onchange="updateScore()" type="radio" name="ptosis" value="3">
+3 Constant
+</label>
+
+</div>
+
+<div class="card">
+<h2>Daily Factors</h2>
+
+<p>Fatigue</p>
+<input type="range" min="0" max="10">
+
+<p>Stress</p>
+<input type="range" min="0" max="10">
+
+<p>Notes</p>
+<textarea></textarea>
 
 </div>
 
