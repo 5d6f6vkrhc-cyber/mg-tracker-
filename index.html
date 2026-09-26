@@ -171,38 +171,56 @@ function addMedication(){
     
 function saveEntry(){
 
-    const score =
-    document.getElementById("score").innerText;
+    const entry = {
 
-    const severity =
-    document.getElementById("severity").innerText;
+        date: new Date().toLocaleDateString(),
 
-    const notes =
-    document.getElementById("notes").value;
+        score:
+        document.getElementById("score").innerText,
+
+        severity:
+        document.getElementById("severity").innerText,
+
+        notes:
+        document.getElementById("notes").value,
+
+        talk:
+        document.querySelector('input[name="talk"]:checked').value,
+
+        chew:
+        document.querySelector('input[name="chew"]:checked').value,
+
+        swallow:
+        document.querySelector('input[name="swallow"]:checked').value,
+
+        breathing:
+        document.querySelector('input[name="breathing"]:checked').value,
+
+        brush:
+        document.querySelector('input[name="brush"]:checked').value,
+
+        chair:
+        document.querySelector('input[name="chair"]:checked').value,
+
+        vision:
+        document.querySelector('input[name="vision"]:checked').value,
+
+        ptosis:
+        document.querySelector('input[name="ptosis"]:checked').value
+
+    };
 
     let history =
     JSON.parse(
-    localStorage.getItem(
-    "mgtrackerhistory"
-    ) || "[]"
+        localStorage.getItem("mgtrackerhistory")
+        || "[]"
     );
 
-    history.unshift({
-
-        date:
-        new Date().toLocaleDateString(),
-
-        score: score,
-
-        severity: severity,
-
-        notes: notes
-
-    });
+    history.unshift(entry);
 
     localStorage.setItem(
-    "mgtrackerhistory",
-    JSON.stringify(history)
+        "mgtrackerhistory",
+        JSON.stringify(history)
     );
 
     renderHistory();
@@ -215,38 +233,64 @@ function renderHistory(){
 
     let history =
     JSON.parse(
-    localStorage.getItem(
-    "mgtrackerhistory"
-    ) || "[]"
+        localStorage.getItem("mgtrackerhistory")
+        || "[]"
     );
 
     let html = "";
 
     history.forEach(function(item){
 
-        html +=
-        "<div class='medication'>" +
+        html += `
 
-        "<strong>" +
-        item.date +
-        "</strong><br>" +
+        <div class="medication">
 
-        "Score: " +
-        item.score +
-        "<br>" +
+            <strong>${item.date}</strong><br><br>
 
-        "Severity: " +
-        item.severity +
-        "<br>" +
+            Total Score:
+            ${item.score}<br>
 
-        item.notes +
+            Severity:
+            ${item.severity}<br><br>
 
-        "</div>";
+            <strong>MG‑ADL Details</strong><br>
+
+            Talking:
+            ${item.talk}<br>
+
+            Chewing:
+            ${item.chew}<br>
+
+            Swallowing:
+            ${item.swallow}<br>
+
+            Breathing:
+            ${item.breathing}<br>
+
+            Brush Hair / Teeth:
+            ${item.brush}<br>
+
+            Rise From Chair:
+            ${item.chair}<br>
+
+            Double Vision:
+            ${item.vision}<br>
+
+            Eyelid Droop:
+            ${item.ptosis}<br><br>
+
+            <strong>Notes</strong><br>
+
+            ${item.notes}
+
+        </div>
+
+        `;
 
     });
 
     document.getElementById(
-    "history"
+        "history"
     ).innerHTML = html;
 
 }
