@@ -168,11 +168,96 @@ function addMedication(){
     loadMedications();
 
 }
+    
+function saveEntry(){
+
+    const score =
+    document.getElementById("score").innerText;
+
+    const severity =
+    document.getElementById("severity").innerText;
+
+    const notes =
+    document.getElementById("notes").value;
+
+    let history =
+    JSON.parse(
+    localStorage.getItem(
+    "mgtrackerhistory"
+    ) || "[]"
+    );
+
+    history.unshift({
+
+        date:
+        new Date().toLocaleDateString(),
+
+        score: score,
+
+        severity: severity,
+
+        notes: notes
+
+    });
+
+    localStorage.setItem(
+    "mgtrackerhistory",
+    JSON.stringify(history)
+    );
+
+    renderHistory();
+
+    alert("Entry Saved");
+
+}
+
+function renderHistory(){
+
+    let history =
+    JSON.parse(
+    localStorage.getItem(
+    "mgtrackerhistory"
+    ) || "[]"
+    );
+
+    let html = "";
+
+    history.forEach(function(item){
+
+        html +=
+        "<div class='medication'>" +
+
+        "<strong>" +
+        item.date +
+        "</strong><br>" +
+
+        "Score: " +
+        item.score +
+        "<br>" +
+
+        "Severity: " +
+        item.severity +
+        "<br>" +
+
+        item.notes +
+
+        "</div>";
+
+    });
+
+    document.getElementById(
+    "history"
+    ).innerHTML = html;
+
+}
 
 window.onload = function(){
 
     updateScore();
+
     loadMedications();
+
+    renderHistory();
 
 };
 
@@ -304,7 +389,49 @@ Add Medication
 
 <div id="medications"></div>
 
+    <div class="card">
+
+<h2>Daily Notes</h2>
+
+<textarea
+id="notes"
+rows="4"
+style="width:100%;"
+placeholder="Daily comments">
+</textarea>
+
+<br><br>
+
+<button onclick="saveEntry()">
+Save Today's Entry
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>History</h2>
+
+<div id="history"></div>
+
+</div>
+
+<br><br>
+
+<button onclick="saveEntry()">
+Save Today's Entry
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>History</h2>
+
+<div id="history"></div>
+
 </div>
 
 </body>
 </html>
+
