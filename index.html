@@ -110,13 +110,19 @@ function loadMedications(){
 
     let html = "";
 
-    meds.forEach(function(m){
+    meds.forEach(function(m,index){
 
         html +=
-        "<div class='medication'>"
-        + m.name +
-        " - "
-        + m.dose +
+        "<div class='medication'>" +
+
+        m.name +
+        " - " +
+        m.dose +
+
+        " <button onclick='deleteMedication(" +
+        index +
+        ")'>Delete</button>" +
+
         "</div>";
 
     });
@@ -124,6 +130,25 @@ function loadMedications(){
     document.getElementById(
     "medications"
     ).innerHTML = html;
+
+}
+
+function deleteMedication(index){
+
+    let meds =
+    JSON.parse(
+    localStorage.getItem("mgtrackermeds")
+    || "[]"
+    );
+
+    meds.splice(index,1);
+
+    localStorage.setItem(
+    "mgtrackermeds",
+    JSON.stringify(meds)
+    );
+
+    loadMedications();
 
 }
 
@@ -239,13 +264,25 @@ function renderHistory(){
 
     let html = "";
 
-    history.forEach(function(item){
+    history.forEach(function(item,index){
 
         html += `
 
-        <div class="medication">
+<div class="medication">
 
-            <strong>${item.date}</strong><br><br>
+<strong>${item.date}</strong>
+
+<button onclick="deleteHistory(${index})">
+Delete
+</button>
+
+<br><br>
+
+Total Score:
+${item.score}<br>
+
+Severity:
+${item.severity}<br><br>
 
             Total Score:
             ${item.score}<br>
@@ -292,6 +329,23 @@ function renderHistory(){
     document.getElementById(
         "history"
     ).innerHTML = html;
+function deleteHistory(index){
+
+    let history =
+    JSON.parse(
+    localStorage.getItem(
+    "mgtrackerhistory"
+    ) || "[]"
+    );
+
+    history.splice(index,1);
+
+    localStorage.setItem(
+    "mgtrackerhistory",
+    JSON.stringify(history)
+    );
+
+    renderHistory();
 
 }
 
@@ -461,4 +515,3 @@ Save Today's Entry
 </div>
 
 <br><br>
-
