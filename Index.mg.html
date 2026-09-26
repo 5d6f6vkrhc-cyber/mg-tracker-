@@ -324,6 +324,23 @@ index +
     document.getElementById(
         "history"
     ).innerHTML = html;
+function deleteHistory(index){
+
+    let history =
+    JSON.parse(
+    localStorage.getItem(
+    "mgtrackerhistory"
+    ) || "[]"
+    );
+
+    history.splice(index,1);
+
+    localStorage.setItem(
+    "mgtrackerhistory",
+    JSON.stringify(history)
+    );
+
+    renderHistory();
 
 }
 
