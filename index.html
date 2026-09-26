@@ -88,7 +88,68 @@ function updateScore(){
     severity;
 }
 
+function addMedication(){
+
+  const name =
+    document.getElementById("medName").value;
+
+  const dose =
+    document.getElementById("medDose").value;
+
+  if(name === "") return;
+
+  let meds =
+    JSON.parse(
+      localStorage.getItem("mg_meds") || "[]"
+    );
+
+  meds.push({
+    name:name,
+    dose:dose
+  });
+
+  localStorage.setItem(
+    "mg_meds",
+    JSON.stringify(meds)
+  );
+
+  document.getElementById("medName").value = "";
+  document.getElementById("medDose").value = "";
+
+  loadMedications();
+}
+
+function loadMedications(){
+
+  let meds =
+    JSON.parse(
+      localStorage.getItem("mg_meds") || "[]"
+    );
+
+  let html = "";
+
+  meds.forEach(function(m){
+
+    html +=
+      "<div style='padding:8px;border-bottom:1px solid #ddd'>" +
+      m.name + " — " + m.dose +
+      "</div>";
+
+  });
+
+  document.getElementById(
+    "medications"
+  ).innerHTML = html;
+}
+
 window.onload = function(){
+
+  updateScore();
+
+  loadMedications();
+
+};
+
   updateScore();
 };
 
@@ -255,7 +316,19 @@ window.onload = function(){
 <p>Notes</p>
 <textarea></textarea>
 
+<div class="card">
+
+<h2>Medications</h2>
+
+<input id="medName" type="text" placeholder="Medication Name">
+
+<input id="medDose" type="text" placeholder="Dose">
+
+<button onclick="addMedication()">
+Add Medication
+</button>
+
+<div id="medications"></div>
+
 </div>
 
-</body>
-</html>
