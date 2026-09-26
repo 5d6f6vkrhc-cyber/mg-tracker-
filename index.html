@@ -1,517 +1,486 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>MG Tracker Version A</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MG-ADL Tracker</title>
 
 <style>
+:root{
+  --bg:#f4f6f9;
+  --card:#ffffff;
+  --primary:#2563eb;
+  --danger:#dc2626;
+  --success:#16a34a;
+  --text:#1f2937;
+  --border:#d1d5db;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
 body{
-    font-family:-apple-system,Arial,sans-serif;
-    background:#eef4ff;
-    margin:0;
-    padding:10px;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  padding:20px;
+}
+
+.container{
+  max-width:1200px;
+  margin:auto;
+}
+
+h1,h2{
+  margin-bottom:15px;
 }
 
 .card{
-    background:white;
-    padding:15px;
-    margin-bottom:15px;
-    border-radius:12px;
+  background:var(--card);
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 2px 6px rgba(0,0,0,.08);
 }
 
-.score{
-    font-size:36px;
-    font-weight:bold;
-    color:#2563eb;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:15px;
 }
 
 label{
-    display:block;
-    padding:4px 0;
+  display:block;
+  margin-bottom:6px;
+  font-weight:bold;
 }
 
-input[type=text]{
-    width:95%;
-    padding:10px;
-    margin:5px 0;
+select,
+input,
+textarea{
+  width:100%;
+  padding:8px;
+  border:1px solid var(--border);
+  border-radius:6px;
+}
+
+textarea{
+  min-height:100px;
 }
 
 button{
-    background:#2563eb;
-    color:white;
-    border:none;
-    border-radius:8px;
-    padding:10px;
+  border:none;
+  padding:10px 16px;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
 }
 
-.medication{
-    padding:8px;
-    border-bottom:1px solid #ddd;
+.btn-primary{
+  background:var(--primary);
+  color:white;
 }
 
+.btn-danger{
+  background:var(--danger);
+  color:white;
+}
+
+.btn-success{
+  background:var(--success);
+  color:white;
+}
+
+.med-row{
+  display:flex;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.med-row input{
+  flex:1;
+}
+
+.summary{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+  margin-top:15px;
+  font-size:18px;
+  font-weight:bold;
+}
+
+.history-entry{
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:15px;
+  margin-bottom:15px;
+  background:#fafafa;
+}
+
+.score-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:8px;
+  margin-top:10px;
+  margin-bottom:10px;
+}
+
+.score-item{
+  background:white;
+  border:1px solid var(--border);
+  padding:8px;
+  border-radius:6px;
+}
+
+.small{
+  font-size:12px;
+  color:#555;
+}
+
+@media(max-width:600px){
+  .med-row{
+    flex-direction:column;
+  }
+}
 </style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>MG-ADL Tracker</h1>
+
+<div class="card">
+  <h2>MG-ADL Entry</h2>
+
+  <div class="grid">
+
+    <div>
+      <label>Talking</label>
+      <select id="talking">
+        <option value="0">0 - Normal</option>
+        <option value="1">1 - Intermittent slurring</option>
+        <option value="2">2 - Constant slurring</option>
+        <option value="3">3 - Difficult to understand</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Chewing</label>
+      <select id="chewing">
+        <option value="0">0 - Normal</option>
+        <option value="1">1 - Fatigue with solid food</option>
+        <option value="2">2 - Soft food preferred</option>
+        <option value="3">3 - Feeding assistance required</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Swallowing</label>
+      <select id="swallowing">
+        <option value="0">0 - Normal</option>
+        <option value="1">1 - Rare choking</option>
+        <option value="2">2 - Frequent choking</option>
+        <option value="3">3 - Tube feeding required</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Breathing</label>
+      <select id="breathing">
+        <option value="0">0 - Normal</option>
+        <option value="1">1 - Shortness with exertion</option>
+        <option value="2">2 - Shortness at rest</option>
+        <option value="3">3 - Ventilatory support</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Brushing Teeth / Hair</label>
+      <select id="brushing">
+        <option value="0">0 - Normal</option>
+        <option value="1">1 - Extra effort</option>
+        <option value="2">2 - Rest periods needed</option>
+        <option value="3">3 - Assistance required</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Rising From Chair</label>
+      <select id="chair">
+        <option value="0">0 - Normal</option>
+        <option value="1">1 - Mild difficulty</option>
+        <option value="2">2 - Moderate difficulty</option>
+        <option value="3">3 - Requires assistance</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Double Vision</label>
+      <select id="doubleVision">
+        <option value="0">0 - None</option>
+        <option value="1">1 - Occasional</option>
+        <option value="2">2 - Frequent</option>
+        <option value="3">3 - Constant</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Eyelid Droop</label>
+      <select id="eyelid">
+        <option value="0">0 - None</option>
+        <option value="1">1 - Occasional</option>
+        <option value="2">2 - Frequent</option>
+        <option value="3">3 - Constant</option>
+      </select>
+    </div>
+
+  </div>
+
+  <div class="summary">
+    <div>Total Score: <span id="totalScore">0</span></div>
+    <div>Severity: <span id="severity">Minimal</span></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Medications</h2>
+
+  <div id="medications"></div>
+
+  <button class="btn-primary" onclick="addMedication()">Add Medication</button>
+</div>
+
+<div class="card">
+  <h2>Notes</h2>
+  <textarea id="notes" placeholder="Enter notes..."></textarea>
+</div>
+
+<div class="card">
+  <button class="btn-success" onclick="saveEntry()">Save Entry</button>
+</div>
+
+<div class="card">
+  <h2>History</h2>
+  <div id="history"></div>
+</div>
+
+</div>
 
 <script>
+const categories = [
+  "talking",
+  "chewing",
+  "swallowing",
+  "breathing",
+  "brushing",
+  "chair",
+  "doubleVision",
+  "eyelid"
+];
+
+function addMedication(name="", dose=""){
+  const holder = document.getElementById("medications");
+
+  const row = document.createElement("div");
+  row.className = "med-row";
+
+  row.innerHTML = `
+    <input type="text" class="med-name" placeholder="Medication" value="${name}">
+    <input type="text" class="med-dose" placeholder="Dose" value="${dose}">
+    <button class="btn-danger" onclick="this.parentElement.remove(); saveMedications();">Delete</button>
+  `;
+
+  holder.appendChild(row);
+  saveMedications();
+}
+
+function getTotalScore(){
+  let total = 0;
+
+  categories.forEach(id=>{
+    total += Number(document.getElementById(id).value);
+  });
+
+  return total;
+}
+
+function getSeverity(score){
+  if(score <= 4) return "Minimal";
+  if(score <= 8) return "Mild";
+  if(score <= 12) return "Moderate";
+  if(score <= 18) return "Significant";
+  return "Severe";
+}
 
 function updateScore(){
+  const score = getTotalScore();
 
-    let total = 0;
-
-    const sections = [
-      "talk",
-      "chew",
-      "swallow",
-      "breathing",
-      "brush",
-      "chair",
-      "vision",
-      "ptosis"
-    ];
-
-    sections.forEach(function(section){
-
-        const selected =
-        document.querySelector(
-        'input[name="' + section + '"]:checked');
-
-        if(selected){
-            total += parseInt(selected.value);
-        }
-
-    });
-
-    document.getElementById("score").innerHTML =
-        total + "/24";
-
-    let severity = "Mild";
-
-    if(total >= 16){
-        severity = "Severe";
-    }
-    else if(total >= 8){
-        severity = "Moderate";
-    }
-
-    document.getElementById("severity").innerHTML =
-        severity;
-
+  document.getElementById("totalScore").textContent = score;
+  document.getElementById("severity").textContent = getSeverity(score);
 }
+
+categories.forEach(id=>{
+  window.addEventListener("load",()=>{
+    document.getElementById(id).addEventListener("change",updateScore);
+  });
+});
+
+function saveMedications(){
+  const meds = [];
+
+  document.querySelectorAll(".med-row").forEach(row=>{
+    meds.push({
+      name: row.querySelector(".med-name").value,
+      dose: row.querySelector(".med-dose").value
+    });
+  });
+
+  localStorage.setItem("mgadl_meds", JSON.stringify(meds));
+}
+
+document.addEventListener("input",e=>{
+  if(
+    e.target.classList.contains("med-name") ||
+    e.target.classList.contains("med-dose")
+  ){
+    saveMedications();
+  }
+});
 
 function loadMedications(){
+  const meds =
+    JSON.parse(localStorage.getItem("mgadl_meds")) || [];
 
-    let meds =
-    JSON.parse(
-    localStorage.getItem("mgtrackermeds") || "[]"
-    );
+  if(meds.length===0){
+    addMedication();
+    return;
+  }
 
-    let html = "";
-
-    meds.forEach(function(m,index){
-
-        html +=
-        "<div class='medication'>" +
-
-        m.name +
-        " - " +
-        m.dose +
-
-        " <button onclick='deleteMedication(" +
-        index +
-        ")'>Delete</button>" +
-
-        "</div>";
-
-    });
-
-    document.getElementById(
-    "medications"
-    ).innerHTML = html;
-
+  meds.forEach(m=>{
+    addMedication(m.name,m.dose);
+  });
 }
 
-function deleteMedication(index){
-
-    let meds =
-    JSON.parse(
-    localStorage.getItem("mgtrackermeds")
-    || "[]"
-    );
-
-    meds.splice(index,1);
-
-    localStorage.setItem(
-    "mgtrackermeds",
-    JSON.stringify(meds)
-    );
-
-    loadMedications();
-
-}
-
-function addMedication(){
-
-    const name =
-    document.getElementById(
-    "medName"
-    ).value;
-
-    const dose =
-    document.getElementById(
-    "medDose"
-    ).value;
-
-    if(name === "") return;
-
-    let meds =
-    JSON.parse(
-    localStorage.getItem(
-    "mgtrackermeds"
-    ) || "[]");
-
-    meds.push({
-        name:name,
-        dose:dose
-    });
-
-    localStorage.setItem(
-    "mgtrackermeds",
-    JSON.stringify(meds)
-    );
-
-    document.getElementById(
-    "medName"
-    ).value = "";
-
-    document.getElementById(
-    "medDose"
-    ).value = "";
-
-    loadMedications();
-
-}
-    
 function saveEntry(){
 
-    const entry = {
+  saveMedications();
 
-        date: new Date().toLocaleDateString(),
+  const entry = {
+    date:new Date().toLocaleString(),
+    talking:Number(document.getElementById("talking").value),
+    chewing:Number(document.getElementById("chewing").value),
+    swallowing:Number(document.getElementById("swallowing").value),
+    breathing:Number(document.getElementById("breathing").value),
+    brushing:Number(document.getElementById("brushing").value),
+    chair:Number(document.getElementById("chair").value),
+    doubleVision:Number(document.getElementById("doubleVision").value),
+    eyelid:Number(document.getElementById("eyelid").value),
+    total:getTotalScore(),
+    severity:getSeverity(getTotalScore()),
+    notes:document.getElementById("notes").value,
+    medications:JSON.parse(
+      localStorage.getItem("mgadl_meds") || "[]"
+    )
+  };
 
-        score:
-        document.getElementById("score").innerText,
+  const history =
+    JSON.parse(localStorage.getItem("mgadl_history")) || [];
 
-        severity:
-        document.getElementById("severity").innerText,
+  history.unshift(entry);
 
-        notes:
-        document.getElementById("notes").value,
+  localStorage.setItem(
+    "mgadl_history",
+    JSON.stringify(history)
+  );
 
-        talk:
-        document.querySelector('input[name="talk"]:checked').value,
+  renderHistory();
+  alert("Entry saved.");
+}
 
-        chew:
-        document.querySelector('input[name="chew"]:checked').value,
+function deleteHistory(index){
 
-        swallow:
-        document.querySelector('input[name="swallow"]:checked').value,
+  const history =
+    JSON.parse(localStorage.getItem("mgadl_history")) || [];
 
-        breathing:
-        document.querySelector('input[name="breathing"]:checked').value,
+  history.splice(index,1);
 
-        brush:
-        document.querySelector('input[name="brush"]:checked').value,
+  localStorage.setItem(
+    "mgadl_history",
+    JSON.stringify(history)
+  );
 
-        chair:
-        document.querySelector('input[name="chair"]:checked').value,
-
-        vision:
-        document.querySelector('input[name="vision"]:checked').value,
-
-        ptosis:
-        document.querySelector('input[name="ptosis"]:checked').value
-
-    };
-
-    let history =
-    JSON.parse(
-        localStorage.getItem("mgtrackerhistory")
-        || "[]"
-    );
-
-    history.unshift(entry);
-
-    localStorage.setItem(
-        "mgtrackerhistory",
-        JSON.stringify(history)
-    );
-
-    renderHistory();
-
-    alert("Entry Saved");
-
+  renderHistory();
 }
 
 function renderHistory(){
 
-    let history =
-    JSON.parse(
-        localStorage.getItem("mgtrackerhistory")
-        || "[]"
-    );
+  const history =
+    JSON.parse(localStorage.getItem("mgadl_history")) || [];
 
-    let html = "";
+  const container =
+    document.getElementById("history");
 
-    history.forEach(function(item,index){
+  if(history.length===0){
+    container.innerHTML =
+      "<p>No entries saved.</p>";
+    return;
+  }
 
-        html += `
+  container.innerHTML = "";
 
-<div class="medication">
+  history.forEach((entry,index)=>{
 
-<strong>${item.date}</strong>
+    const div = document.createElement("div");
+    div.className = "history-entry";
 
-<button onclick="deleteHistory(${index})">
-Delete
-</button>
+    let meds = "None";
 
-<br><br>
+    if(entry.medications.length){
+      meds = entry.medications
+        .map(m => `${m.name} ${m.dose}`)
+        .join(", ");
+    }
 
-Total Score:
-${item.score}<br>
+    div.innerHTML = `
+      <strong>${entry.date}</strong>
 
-Severity:
-${item.severity}<br><br>
+      <div class="score-grid">
+        <div class="score-item">Talking: ${entry.talking}</div>
+        <div class="score-item">Chewing: ${entry.chewing}</div>
+        <div class="score-item">Swallowing: ${entry.swallowing}</div>
+        <div class="score-item">Breathing: ${entry.breathing}</div>
+        <div class="score-item">Brushing: ${entry.brushing}</div>
+        <div class="score-item">Chair: ${entry.chair}</div>
+        <div class="score-item">Double Vision: ${entry.doubleVision}</div>
+        <div class="score-item">Eyelid Droop: ${entry.eyelid}</div>
+      </div>
 
-            Total Score:
-            ${item.score}<br>
+      <p><strong>Total:</strong> ${entry.total}</p>
+      <p><strong>Severity:</strong> ${entry.severity}</p>
+      <p><strong>Medications:</strong> ${meds}</p>
+      <p><strong>Notes:</strong> ${entry.notes || "-"}</p>
 
-            Severity:
-            ${item.severity}<br><br>
+      <button class="btn-danger"
+        onclick="deleteHistory(${index})">
+        Delete Entry
+      </button>
+    `;
 
-            <strong>MG‑ADL Details</strong><br>
-
-            Talking:
-            ${item.talk}<br>
-
-            Chewing:
-            ${item.chew}<br>
-
-            Swallowing:
-            ${item.swallow}<br>
-
-            Breathing:
-            ${item.breathing}<br>
-
-            Brush Hair / Teeth:
-            ${item.brush}<br>
-
-            Rise From Chair:
-            ${item.chair}<br>
-
-            Double Vision:
-            ${item.vision}<br>
-
-            Eyelid Droop:
-            ${item.ptosis}<br><br>
-
-            <strong>Notes</strong><br>
-
-            ${item.notes}
-
-        </div>
-
-        `;
-
-    });
-
-    document.getElementById(
-        "history"
-    ).innerHTML = html;
-function deleteHistory(index){
-
-    let history =
-    JSON.parse(
-    localStorage.getItem(
-    "mgtrackerhistory"
-    ) || "[]"
-    );
-
-    history.splice(index,1);
-
-    localStorage.setItem(
-    "mgtrackerhistory",
-    JSON.stringify(history)
-    );
-
-    renderHistory();
-
+    container.appendChild(div);
+  });
 }
 
-window.onload = function(){
-
-    updateScore();
-
-    loadMedications();
-
-    renderHistory();
-
+window.onload = () => {
+  loadMedications();
+  updateScore();
+  renderHistory();
 };
-
 </script>
 
-</head>
-
-<body>
-
-<div class="card">
-
-<div id="score" class="score">
-0/24
-</div>
-
-<div id="severity">
-Mild
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>Talking</h2>
-
-<label><input type="radio" name="talk" value="0" checked onchange="updateScore()">0 Normal</label>
-<label><input type="radio" name="talk" value="1" onchange="updateScore()">1 Intermittent slurring</label>
-<label><input type="radio" name="talk" value="2" onchange="updateScore()">2 Constant slurring but understandable</label>
-<label><input type="radio" name="talk" value="3" onchange="updateScore()">3 Difficult to understand</label>
-
-</div>
-
-<div class="card">
-
-<h2>Chewing</h2>
-
-<label><input type="radio" name="chew" value="0" checked onchange="updateScore()">0 Normal</label>
-<label><input type="radio" name="chew" value="1" onchange="updateScore()">1 Fatigue with solids</label>
-<label><input type="radio" name="chew" value="2" onchange="updateScore()">2 Fatigue with soft foods</label>
-<label><input type="radio" name="chew" value="3" onchange="updateScore()">3 Feeding tube required</label>
-
-</div>
-
-<div class="card">
-
-<h2>Swallowing</h2>
-
-<label><input type="radio" name="swallow" value="0" checked onchange="updateScore()">0 Normal</label>
-<label><input type="radio" name="swallow" value="1" onchange="updateScore()">1 Rare choking</label>
-<label><input type="radio" name="swallow" value="2" onchange="updateScore()">2 Frequent choking</label>
-<label><input type="radio" name="swallow" value="3" onchange="updateScore()">3 Feeding tube required</label>
-
-</div>
-
-<div class="card">
-
-<h2>Breathing</h2>
-
-<label><input type="radio" name="breathing" value="0" checked onchange="updateScore()">0 Normal</label>
-<label><input type="radio" name="breathing" value="1" onchange="updateScore()">1 Exertional shortness of breath</label>
-<label><input type="radio" name="breathing" value="2" onchange="updateScore()">2 Shortness of breath at rest</label>
-<label><input type="radio" name="breathing" value="3" onchange="updateScore()">3 Ventilator support</label>
-
-</div>
-
-<div class="card">
-
-<h2>Brush Hair / Teeth</h2>
-
-<label><input type="radio" name="brush" value="0" checked onchange="updateScore()">0 No difficulty</label>
-<label><input type="radio" name="brush" value="1" onchange="updateScore()">1 Extra effort</label>
-<label><input type="radio" name="brush" value="2" onchange="updateScore()">2 Rest periods needed</label>
-<label><input type="radio" name="brush" value="3" onchange="updateScore()">3 Needs assistance</label>
-
-</div>
-
-<div class="card">
-
-<h2>Rise From Chair</h2>
-
-<label><input type="radio" name="chair" value="0" checked onchange="updateScore()">0 Normal</label>
-<label><input type="radio" name="chair" value="1" onchange="updateScore()">1 Mild difficulty</label>
-<label><input type="radio" name="chair" value="2" onchange="updateScore()">2 Significant difficulty</label>
-<label><input type="radio" name="chair" value="3" onchange="updateScore()">3 Requires assistance</label>
-
-</div>
-
-<div class="card">
-
-<h2>Double Vision</h2>
-
-<label><input type="radio" name="vision" value="0" checked onchange="updateScore()">0 None</label>
-<label><input type="radio" name="vision" value="1" onchange="updateScore()">1 Not daily</label>
-<label><input type="radio" name="vision" value="2" onchange="updateScore()">2 Daily intermittent</label>
-<label><input type="radio" name="vision" value="3" onchange="updateScore()">3 Constant</label>
-
-</div>
-
-<div class="card">
-
-<h2>Eyelid Droop</h2>
-
-<label><input type="radio" name="ptosis" value="0" checked onchange="updateScore()">0 None</label>
-<label><input type="radio" name="ptosis" value="1" onchange="updateScore()">1 Not daily</label>
-<label><input type="radio" name="ptosis" value="2" onchange="updateScore()">2 Daily intermittent</label>
-<label><input type="radio" name="ptosis" value="3" onchange="updateScore()">3 Constant</label>
-
-</div>
-
-<div class="card">
-
-<h2>Medications</h2>
-
-<input
-id="medName"
-type="text"
-placeholder="Medication Name">
-
-<input
-id="medDose"
-type="text"
-placeholder="Dose">
-
-<br><br>
-
-<button onclick="addMedication()">
-Add Medication
-</button>
-
-<div id="medications"></div>
-
-    <div class="card">
-
-<h2>Daily Notes</h2>
-
-<textarea
-id="notes"
-rows="4"
-style="width:100%;"
-placeholder="Daily comments">
-</textarea>
-
-<br><br>
-
-<button onclick="saveEntry()">
-Save Today's Entry
-</button>
-
-</div>
-
-<div class="card">
-
-<h2>History</h2>
-
-<div id="history"></div>
-
-</div>
-
-<br><br>
+</body>
+</html>
