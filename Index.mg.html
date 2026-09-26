@@ -264,13 +264,20 @@ function renderHistory(){
 
     let html = "";
 
-    history.forEach(function(item){
+    history.forEach(function(item,index){
 
         html += `
 
         <div class="medication">
 
-            <strong>${item.date}</strong><br><br>
+"<strong>" +
+item.date +
+"</strong> " +
+
+"<button onclick='deleteHistory(" +
+index +
+")'>Delete</button><br>" +
+
 
             Total Score:
             ${item.score}<br>
