@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MG Tracker Test</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#eef4ff;
+    margin:0;
+    padding:20px;
+}
+.card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+}
+button{
+    padding:12px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    border-radius:8px;
+}
+</style>
+
+<script>
+function testClick(){
+    document.getElementById("result").innerHTML =
+        "JavaScript is working!";
+}
+</script>
+
+</head>
+<body>
+
+<div class="card">
+<h1>MG Tracker Test</h1>
+
+<p>If you can press this button and see the message below, then GitHub Pages and JavaScript are working.</p>
+
+<button onclick="testClick()">
+Test JavaScript
+</button>
+
+<p id="result"></p>
+
+</div>
+
+</body>
+</html>
