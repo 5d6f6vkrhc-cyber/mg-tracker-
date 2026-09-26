@@ -7,328 +7,79 @@
 
 <style>
 body{
-  font-family:-apple-system,Arial,sans-serif;
-  background:#eef4ff;
-  margin:0;
+    font-family:Arial,sans-serif;
+    background:#eef4ff;
+    margin:0;
+    padding:20px;
 }
-
-.header{
-  background:#2563eb;
-  color:white;
-  padding:20px;
-}
-
 .card{
-  background:white;
-  margin:12px;
-  padding:15px;
-  border-radius:12px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:15px;
 }
-
 .score{
-  font-size:36px;
-  font-weight:bold;
-  color:#2563eb;
-}
-
-label{
-  display:block;
-  margin:4px 0;
-}
-
-textarea{
-  width:100%;
-  height:100px;
-}
-
-input[type=range]{
-  width:100%;
+    font-size:36px;
+    font-weight:bold;
+    color:#2563eb;
 }
 </style>
 
 <script>
-
 function updateScore(){
+    let total = 0;
 
-  const groups = [
-    "talk",
-    "chew",
-    "swallow",
-    "breathing",
-    "vision",
-    "ptosis"
-  ];
+    ["talk","chew","swallow","breathing","vision","ptosis"]
+    .forEach(group => {
+        const selected =
+        document.querySelector(
+        'input[name="'+group+'"]:checked');
 
-  let total = 0;
+        if(selected){
+            total += parseInt(selected.value);
+        }
+    });
 
-  groups.forEach(group => {
+    document.getElementById("score").innerHTML =
+        total + "/24";
 
-    const selected =
-      document.querySelector(
-        'input[name="' + group + '"]:checked'
-      );
+    let severity="Mild";
 
-    if(selected){
-      total += parseInt(selected.value);
-    }
+    if(total>=16){severity="Severe";}
+    else if(total>=8){severity="Moderate";}
 
-  });
-
-  document.getElementById("score").innerHTML =
-    total + "/24";
-
-  let severity = "Mild";
-
-  if(total >= 16)
-    severity = "Severe";
-  else if(total >= 8)
-    severity = "Moderate";
-
-  document.getElementById("severity").innerHTML =
-    severity;
+    document.getElementById("severity").innerHTML =
+        severity;
 }
 
-function addMedication(){
-
-  const name =
-    document.getElementById("medName").value;
-
-  const dose =
-    document.getElementById("medDose").value;
-
-  if(name === "") return;
-
-  let meds =
-    JSON.parse(
-      localStorage.getItem("mg_meds") || "[]"
-    );
-
-  meds.push({
-    name:name,
-    dose:dose
-  });
-
-  localStorage.setItem(
-    "mg_meds",
-    JSON.stringify(meds)
-  );
-
-  document.getElementById("medName").value = "";
-  document.getElementById("medDose").value = "";
-
-  loadMedications();
+window.onload=function(){
+    updateScore();
 }
-
-function loadMedications(){
-
-  let meds =
-    JSON.parse(
-      localStorage.getItem("mg_meds") || "[]"
-    );
-
-  let html = "";
-
-  meds.forEach(function(m){
-
-    html +=
-      "<div style='padding:8px;border-bottom:1px solid #ddd'>" +
-      m.name + " — " + m.dose +
-      "</div>";
-
-  });
-
-  document.getElementById(
-    "medications"
-  ).innerHTML = html;
-}
-
-window.onload = function(){
-
-  updateScore();
-
-  loadMedications();
-
-};
-
-  updateScore();
-};
-
 </script>
-
 </head>
 
 <body>
 
-<div class="header">
-  <h1>MG Tracker</h1>
+<div class="card">
+<div class="score" id="score">0/24</div>
+<div id="severity">Mild</div>
 </div>
 
 <div class="card">
-  <div class="score" id="score">0/24</div>
-  <div id="severity">Mild</div>
-</div>
-
-<div class="card">
-
 <h2>Talking</h2>
+<label><input type="radio" name="talk" value="0" checked onchange="updateScore()">0 Normal</label>
+<label><input type="radio" name="talk" value="1" onchange="updateScore()">1 Mild</label>
+<label><input type="radio" name="talk" value="2" onchange="updateScore()">2 Moderate</label>
+<label><input type="radio" name="talk" value="3" onchange="updateScore()">3 Severe</label>
+</div>
 
-<label>
-<input onchange="updateScore()" type="radio" name="talk" value="0" checked>
-0 Normal
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="talk" value="1">
-1 Intermittent slurring
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="talk" value="2">
-2 Constant slurring but understandable
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="talk" value="3">
-3 Difficult to understand speech
-</label>
-
+<div class="card">
 <h2>Chewing</h2>
-
-<label>
-<input onchange="updateScore()" type="radio" name="chew" value="0" checked>
-0 Normal
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="chew" value="1">
-1 Fatigue with solids
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="chew" value="2">
-2 Fatigue with soft foods
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="chew" value="3">
-3 Feeding tube required
-</label>
-
-<h2>Swallowing</h2>
-
-<label>
-<input onchange="updateScore()" type="radio" name="swallow" value="0" checked>
-0 Normal
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="swallow" value="1">
-1 Rare choking
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="swallow" value="2">
-2 Frequent choking
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="swallow" value="3">
-3 Feeding tube required
-</label>
-
-<h2>Breathing</h2>
-
-<label>
-<input onchange="updateScore()" type="radio" name="breathing" value="0" checked>
-0 Normal
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="breathing" value="1">
-1 Shortness of breath on exertion
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="breathing" value="2">
-2 Shortness of breath at rest
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="breathing" value="3">
-3 Ventilator support
-</label>
-
-<h2>Double Vision</h2>
-
-<label>
-<input onchange="updateScore()" type="radio" name="vision" value="0" checked>
-0 None
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="vision" value="1">
-1 Occasional
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="vision" value="2">
-2 Daily intermittent
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="vision" value="3">
-3 Constant
-</label>
-
-<h2>Eyelid Droop</h2>
-
-<label>
-<input onchange="updateScore()" type="radio" name="ptosis" value="0" checked>
-0 None
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="ptosis" value="1">
-1 Occasional
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="ptosis" value="2">
-2 Daily intermittent
-</label>
-
-<label>
-<input onchange="updateScore()" type="radio" name="ptosis" value="3">
-3 Constant
-</label>
-
+<label><input type="radio" name="chew" value="0" checked onchange="updateScore()">0 Normal</label>
+<label><input type="radio" name="chew" value="1" onchange="updateScore()">1 Mild</label>
+<label><input type="radio" name="chew" value="2" onchange="updateScore()">2 Moderate</label>
+<label><input type="radio" name="chew" value="3" onchange="updateScore()">3 Severe</label>
 </div>
 
-<div class="card">
-<h2>Daily Factors</h2>
-
-<p>Fatigue</p>
-<input type="range" min="0" max="10">
-
-<p>Stress</p>
-<input type="range" min="0" max="10">
-
-<p>Notes</p>
-<textarea></textarea>
-
-<div class="card">
-
-<h2>Medications</h2>
-
-<input id="medName" type="text" placeholder="Medication Name">
-
-<input id="medDose" type="text" placeholder="Dose">
-
-<button onclick="addMedication()">
-Add Medication
-</button>
-
-<div id="medications"></div>
-
-</div>
-
+</body>
+</html>
