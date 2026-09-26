@@ -1,2 +1,312 @@
-https://5d6f6vkrhc-cyber.github.io/mg-tracker-/version-a.html
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>MG Tracker Version A</title>
+
+<style>
+
+body{
+    font-family:-apple-system,Arial,sans-serif;
+    background:#eef4ff;
+    margin:0;
+    padding:10px;
+}
+
+.card{
+    background:white;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:12px;
+}
+
+.score{
+    font-size:36px;
+    font-weight:bold;
+    color:#2563eb;
+}
+
+label{
+    display:block;
+    padding:4px 0;
+}
+
+input[type=text]{
+    width:95%;
+    padding:10px;
+    margin:5px 0;
+}
+
+button{
+    background:#2563eb;
+    color:white;
+    border:none;
+    border-radius:8px;
+    padding:10px;
+}
+
+.medication{
+    padding:8px;
+    border-bottom:1px solid #ddd;
+}
+
+</style>
+
+<script>
+
+function updateScore(){
+
+    let total = 0;
+
+    const sections = [
+      "talk",
+      "chew",
+      "swallow",
+      "breathing",
+      "brush",
+      "chair",
+      "vision",
+      "ptosis"
+    ];
+
+    sections.forEach(function(section){
+
+        const selected =
+        document.querySelector(
+        'input[name="' + section + '"]:checked');
+
+        if(selected){
+            total += parseInt(selected.value);
+        }
+
+    });
+
+    document.getElementById("score").innerHTML =
+        total + "/24";
+
+    let severity = "Mild";
+
+    if(total >= 16){
+        severity = "Severe";
+    }
+    else if(total >= 8){
+        severity = "Moderate";
+    }
+
+    document.getElementById("severity").innerHTML =
+        severity;
+
+}
+
+function loadMedications(){
+
+    let meds =
+    JSON.parse(
+    localStorage.getItem("mgtrackermeds") || "[]"
+    );
+
+    let html = "";
+
+    meds.forEach(function(m){
+
+        html +=
+        "<div class='medication'>"
+        + m.name +
+        " - "
+        + m.dose +
+        "</div>";
+
+    });
+
+    document.getElementById(
+    "medications"
+    ).innerHTML = html;
+
+}
+
+function addMedication(){
+
+    const name =
+    document.getElementById(
+    "medName"
+    ).value;
+
+    const dose =
+    document.getElementById(
+    "medDose"
+    ).value;
+
+    if(name === "") return;
+
+    let meds =
+    JSON.parse(
+    localStorage.getItem(
+    "mgtrackermeds"
+    ) || "[]");
+
+    meds.push({
+        name:name,
+        dose:dose
+    });
+
+    localStorage.setItem(
+    "mgtrackermeds",
+    JSON.stringify(meds)
+    );
+
+    document.getElementById(
+    "medName"
+    ).value = "";
+
+    document.getElementById(
+    "medDose"
+    ).value = "";
+
+    loadMedications();
+
+}
+
+window.onload = function(){
+
+    updateScore();
+    loadMedications();
+
+};
+
+</script>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<div id="score" class="score">
+0/24
+</div>
+
+<div id="severity">
+Mild
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Talking</h2>
+
+<label><input type="radio" name="talk" value="0" checked onchange="updateScore()">0 Normal</label>
+<label><input type="radio" name="talk" value="1" onchange="updateScore()">1 Intermittent slurring</label>
+<label><input type="radio" name="talk" value="2" onchange="updateScore()">2 Constant slurring but understandable</label>
+<label><input type="radio" name="talk" value="3" onchange="updateScore()">3 Difficult to understand</label>
+
+</div>
+
+<div class="card">
+
+<h2>Chewing</h2>
+
+<label><input type="radio" name="chew" value="0" checked onchange="updateScore()">0 Normal</label>
+<label><input type="radio" name="chew" value="1" onchange="updateScore()">1 Fatigue with solids</label>
+<label><input type="radio" name="chew" value="2" onchange="updateScore()">2 Fatigue with soft foods</label>
+<label><input type="radio" name="chew" value="3" onchange="updateScore()">3 Feeding tube required</label>
+
+</div>
+
+<div class="card">
+
+<h2>Swallowing</h2>
+
+<label><input type="radio" name="swallow" value="0" checked onchange="updateScore()">0 Normal</label>
+<label><input type="radio" name="swallow" value="1" onchange="updateScore()">1 Rare choking</label>
+<label><input type="radio" name="swallow" value="2" onchange="updateScore()">2 Frequent choking</label>
+<label><input type="radio" name="swallow" value="3" onchange="updateScore()">3 Feeding tube required</label>
+
+</div>
+
+<div class="card">
+
+<h2>Breathing</h2>
+
+<label><input type="radio" name="breathing" value="0" checked onchange="updateScore()">0 Normal</label>
+<label><input type="radio" name="breathing" value="1" onchange="updateScore()">1 Exertional shortness of breath</label>
+<label><input type="radio" name="breathing" value="2" onchange="updateScore()">2 Shortness of breath at rest</label>
+<label><input type="radio" name="breathing" value="3" onchange="updateScore()">3 Ventilator support</label>
+
+</div>
+
+<div class="card">
+
+<h2>Brush Hair / Teeth</h2>
+
+<label><input type="radio" name="brush" value="0" checked onchange="updateScore()">0 No difficulty</label>
+<label><input type="radio" name="brush" value="1" onchange="updateScore()">1 Extra effort</label>
+<label><input type="radio" name="brush" value="2" onchange="updateScore()">2 Rest periods needed</label>
+<label><input type="radio" name="brush" value="3" onchange="updateScore()">3 Needs assistance</label>
+
+</div>
+
+<div class="card">
+
+<h2>Rise From Chair</h2>
+
+<label><input type="radio" name="chair" value="0" checked onchange="updateScore()">0 Normal</label>
+<label><input type="radio" name="chair" value="1" onchange="updateScore()">1 Mild difficulty</label>
+<label><input type="radio" name="chair" value="2" onchange="updateScore()">2 Significant difficulty</label>
+<label><input type="radio" name="chair" value="3" onchange="updateScore()">3 Requires assistance</label>
+
+</div>
+
+<div class="card">
+
+<h2>Double Vision</h2>
+
+<label><input type="radio" name="vision" value="0" checked onchange="updateScore()">0 None</label>
+<label><input type="radio" name="vision" value="1" onchange="updateScore()">1 Not daily</label>
+<label><input type="radio" name="vision" value="2" onchange="updateScore()">2 Daily intermittent</label>
+<label><input type="radio" name="vision" value="3" onchange="updateScore()">3 Constant</label>
+
+</div>
+
+<div class="card">
+
+<h2>Eyelid Droop</h2>
+
+<label><input type="radio" name="ptosis" value="0" checked onchange="updateScore()">0 None</label>
+<label><input type="radio" name="ptosis" value="1" onchange="updateScore()">1 Not daily</label>
+<label><input type="radio" name="ptosis" value="2" onchange="updateScore()">2 Daily intermittent</label>
+<label><input type="radio" name="ptosis" value="3" onchange="updateScore()">3 Constant</label>
+
+</div>
+
+<div class="card">
+
+<h2>Medications</h2>
+
+<input
+id="medName"
+type="text"
+placeholder="Medication Name">
+
+<input
+id="medDose"
+type="text"
+placeholder="Dose">
+
+<br><br>
+
+<button onclick="addMedication()">
+Add Medication
+</button>
+
+<div id="medications"></div>
+
+</div>
+
+</body>
+</html>
+
 
